@@ -1,7 +1,7 @@
-##Jobly
+## Jobly
 A full stack web application for a job searching and reservation platform 
 
-#Tech used
+# Tech used
 - Node
 - Express
 - PostgreSQL
