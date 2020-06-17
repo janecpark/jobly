@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS companies;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS jobs;
 
-\c jobly_test
+\c jobly
 
 CREATE TABLE companies (
 handle text PRIMARY KEY,

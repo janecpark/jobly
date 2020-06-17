@@ -9,7 +9,7 @@ const PORT = +process.env.PORT || 3000;
 // database is:
 //
 // - on Heroku, get from env var DATABASE_URL
-// - in testing, 'jobly-test'
+// - in testing, 'jobly_test'
 // - else: 'jobly'
 
 let DB_URI;
