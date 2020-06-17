@@ -34,9 +34,12 @@ class Company {
     }
     static async singleComp(data){
         const res = await db.query(`
-        SELECT name, description, logo_url
+        SELECT handle, name, description, logo_url
         FROM companies
         WHERE handle=$1`, [data])
+        if(!res.rows[0]){
+            return new ExpressError('Company not found', 404)
+        }
         return res.rows[0];
     }
 
@@ -50,7 +53,7 @@ class Company {
             logo_url)
             VALUES($1, $2, $3, $4, $5)
             RETURNING
-            name, description, logo_url`,
+            handle, name, num_employees, description, logo_url`,
             [data.handle, data.name, data.num_employees,
             data.description, data.logo_url])
         
@@ -64,7 +67,7 @@ class Company {
         RETURNING handle
         `,[handle])
 
-        if(res.rows.length === 0){
+        if(res.rows[0].length === 0){
             throw { message: `No company with the handle ${handle}`}
         }
         return res.rows[0]

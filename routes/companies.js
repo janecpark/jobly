@@ -4,9 +4,10 @@ const ExpressError = require('../helpers/expressError');
 const Company = require('../models/companies')
 const {validate} = require('jsonschema')
 const companySchema = require('../schemas/companySchema');
+const {authenticateJWT, ensureAdmin} = require('../middleware/auth')
 
 
-router.post('/', async (req, res ,next) =>{
+router.post('/', ensureAdmin, async (req, res ,next) =>{
     try{
         const validation = validate(req.body, companySchema)
         if(!validation.valid){
@@ -19,7 +20,7 @@ router.post('/', async (req, res ,next) =>{
     }
 })
 
-router.get('/', async (req, res, next) =>{
+router.get('/', authenticateJWT, async (req, res, next) =>{
     try{
         const result = await Company.findComp(req.query)
         return res.json(result)
@@ -29,7 +30,7 @@ router.get('/', async (req, res, next) =>{
     }
 })
 
-router.get('/:handle', async(req, res, next) =>{
+router.get('/:handle', authenticateJWT, async(req, res, next) =>{
     try{
         const result = await Company.singleComp(req.params.handle)
         return res.json(result)
@@ -38,7 +39,7 @@ router.get('/:handle', async(req, res, next) =>{
     }
 })
 
-router.patch('/:handle', async(req, res, next) =>{
+router.patch('/:handle', ensureAdmin, async(req, res, next) =>{
     try{
         if('handle' in req.body){
             throw new ExpressError("Can't change the handle", 400)

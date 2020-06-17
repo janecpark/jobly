@@ -41,14 +41,17 @@ class Job{
         const res = await db.query(`
         SELECT * FROM jobs
         WHERE id=$1`, [data])
+        if(!res.rows[0]){
+            return new ExpressError('Not found')
+        }
         return res.rows[0]
     }
     static async deleteJob(data){
         const res = await db.query(`
         DELETE FROM jobs
         where id=$1
-        RETURN id`,[data])
-        if(res.rows.length === 0){
+        RETURNING id`,[data])
+        if(!res.rows[0]){
             throw {message: 'No jobs found' }
         }
     }
