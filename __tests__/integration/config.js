@@ -7,12 +7,6 @@ const request = require('supertest')
 const TEST_DATA = {};
 
 async function beforeHook(TEST_DATA){
-    // const hashedPassword = await bcrypt.hash("secret", 1);
-    // await db.query(`
-    // INSERT INTO users
-    // (username, password, first_name, last_name, email, photo_url, is_admin)
-    // VALUES ('test', $1, 'Jane', 'Doe', 'test@test.com', 'someurl.com', true)
-    // RETURNING *`,[hashedPassword]);
     
     const response = await request(app)
         .post('/users')
@@ -30,9 +24,7 @@ async function beforeHook(TEST_DATA){
 
     TEST_DATA.userToken = response.body.token;
     TEST_DATA.curUser = jwt.decode(TEST_DATA.userToken).username;
-    // let res = jwt.decode(TEST_DATA.userToken)
-    // console.log(res);
-    
+
     const result = await db.query(`
     INSERT INTO companies
     (handle, name, num_employees, description, logo_url)
@@ -53,7 +45,6 @@ async function beforeHook(TEST_DATA){
 
 async function afterEachHook(){
     try{
-
         await db.query("DELETE from users")
         await db.query("DELETE from companies")
         await db.query("DELETE from jobs")
